@@ -1,15 +1,17 @@
 package com.example.HunterApi.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
+import net.bytebuddy.implementation.bind.annotation.Default;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 @Entity
+@Table(name = "hunters")
 
 public class Hunter {
     @Id
@@ -19,7 +21,7 @@ public class Hunter {
     private String surname;
     private int age;
     @ManyToOne
-    @JoinColumn(name = "ClubId")
+    @JoinColumn(name = "club_id")
     private HuntingClub hunterclub;
     //private List<String> permits;
 
