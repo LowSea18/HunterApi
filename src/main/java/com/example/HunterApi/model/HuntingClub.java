@@ -15,6 +15,6 @@ public class HuntingClub {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy="hunterclub")
+    @OneToMany(mappedBy="huntingClub")
     private List<Hunter> hunters;
 }

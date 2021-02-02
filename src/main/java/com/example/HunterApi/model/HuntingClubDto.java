@@ -1,0 +1,14 @@
+package com.example.HunterApi.model;
+
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+@Builder
+public class HuntingClubDto {
+    private Long id;
+    private String name;
+    private List<HunterInfoDto> huntingInfo;
+}

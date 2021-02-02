@@ -1,7 +1,12 @@
 package com.example.HunterApi.Controler;
 
 import com.example.HunterApi.model.Hunter;
+import com.example.HunterApi.model.HunterDTO;
 import com.example.HunterApi.repository.HunterRepository;
+import com.example.HunterApi.service.HunterService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,37 +15,46 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@AllArgsConstructor
 public class HunterControler {
-    final HunterRepository repository;
+    private HunterService hunterService;
 
-    public HunterControler(HunterRepository repository) {
-        this.repository = repository;
-    }
+
+
 
     @GetMapping("/hunters")
-    public List<Hunter> showAllHunters(){
-        return repository.findAll();
+    public List<HunterDTO> showAllHunters(){
+        return hunterService.showAllHuntersService();
     }
 
+    @GetMapping("/hunters/{id}")
+    public HunterDTO getHunterByIdService(@PathVariable Long id) throws IllegalAccessException {
+        return hunterService.getHunterByIdService(id);
+    }
+
+
+
     @PostMapping("/hunters")
-    public void addHunter(@RequestBody Hunter add)
+    public void addHunter(@RequestBody Hunter add) throws IllegalAccessException
     {
-        repository.save(add);
+        hunterService.addHunterService(add);
 
     }
 
     @DeleteMapping("/hunters/{id}")
-    public void deleteHunter(@PathVariable Long id){
-        repository.deleteById(id);
+    public void deleteHunter(@PathVariable Long id) throws IllegalAccessException{
+
+        hunterService.deleteHunterService(id);
     }
 
-    @GetMapping("/hunters/{id}")
-    public ResponseEntity<Hunter> showHunterById(@PathVariable Long id) {
-        Optional<Hunter> byId = repository.findById(id);
+    @PostMapping("/hunters/{hunters_id}/huntingclub/{club_id}")
+    public ResponseEntity addHuntertoClub(@PathVariable (name = "hunters_id") Long id, @PathVariable (name = "club_id") Long idClub){
 
-        return byId.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-
+        return hunterService.addingHuntertoClubService(id,idClub);
     }
+
+
+
 
 
 }

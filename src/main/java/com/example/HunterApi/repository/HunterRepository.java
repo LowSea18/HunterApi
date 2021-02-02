@@ -13,5 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface HunterRepository extends JpaRepository<Hunter, Long> {
+    Optional<Hunter> findByNameAndSurname(String name ,String surname);
+    Optional<Hunter> findBySurname(String surname);
 
 }

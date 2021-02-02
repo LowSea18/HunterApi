@@ -22,7 +22,7 @@ public class Hunter {
     private int age;
     @ManyToOne
     @JoinColumn(name = "club_id")
-    private HuntingClub hunterclub;
+    private HuntingClub huntingClub;
     //private List<String> permits;
 
     public Hunter(String name, String surname){
