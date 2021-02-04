@@ -1,5 +1,6 @@
 package com.example.HunterApi.service;
 
+import com.example.HunterApi.Exception.NotFoundException;
 import com.example.HunterApi.model.ClubNameInfo;
 import com.example.HunterApi.model.Hunter;
 import com.example.HunterApi.model.HunterDTO;
@@ -21,9 +22,9 @@ import java.util.Optional;
 public class HunterService {
 
     @Autowired
-    HunterRepository repository;
+    private HunterRepository repository;
     @Autowired
-    HuntingClubRepository huntingClubRepository;
+    private HuntingClubRepository huntingClubRepository;
 
 
     public List<HunterDTO> showAllHuntersService(){
@@ -53,12 +54,8 @@ public class HunterService {
     }
 
     public HunterDTO getHunterByIdService(Long id) throws IllegalAccessException {
-        Optional<Hunter> hunterFromDb = repository.findById(id);
-        if (hunterFromDb.isEmpty()){
-            throw new IllegalAccessException();
-        }
-        Hunter hunter = repository.findById(id).orElseThrow();
-        return mapHunterToDto(hunter);
+        Hunter hunterFromDb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+        return mapHunterToDto(hunterFromDb);
     }
 
     public void addHunterService(Hunter add) throws IllegalAccessException
@@ -75,24 +72,16 @@ public class HunterService {
             }
     }
 
-    private boolean checkSurname(String surname){
 
-        return repository.findBySurname(surname).isPresent();
-    }
 
     public void deleteHunterService(Long id) throws IllegalAccessException {
-        Optional<Hunter> hunterFromDb = repository.findById(id);
-        if(hunterFromDb.isEmpty()){
-            throw new IllegalAccessException("Hunter does not exist");
-        }else {
-            repository.deleteById(id);
-        }
+        Hunter hunterFromDb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
     }
 
-    public ResponseEntity<String> addingHuntertoClubService(Long id, Long idClub){
+    public ResponseEntity<String> addingHunterToClubService(Long id, Long idClub){
 
-        Hunter hunterFromdb = repository.findById(id).orElseThrow();
-        HuntingClub clubFromdb = huntingClubRepository.findById(idClub).orElseThrow();
+        Hunter hunterFromdb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+        HuntingClub clubFromdb = huntingClubRepository.findById(idClub).orElseThrow(() -> new NotFoundException("Can not find club, id: " + idClub));
 
         hunterFromdb.setHuntingClub(clubFromdb);
 

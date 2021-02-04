@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.xml.bind.annotation.XmlSchemaTypes;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class HuntingClubControler{
@@ -24,14 +25,14 @@ public class HuntingClubControler{
     }
 
     @GetMapping("/huntingclub/{id}")
-    public ResponseEntity getHuntingClubByIdS(@PathVariable(name = "id") Long id){
+    public HuntingClubDto getHuntingClubByIdS(@PathVariable(name = "id") Long id) throws IllegalAccessException{
         return huntingClubService.getHuntingClubByIdService(id);
     }
 
     @PostMapping("/huntingclub")
-    public ResponseEntity addHunterClub(@RequestBody HuntingClub add)
+    public void addHunterClub(@RequestBody HuntingClub add) throws IllegalAccessException
     {
-        return huntingClubService.addHuntingClubService(add);
+        huntingClubService.addHuntingClubService(add);
 
     }
 }

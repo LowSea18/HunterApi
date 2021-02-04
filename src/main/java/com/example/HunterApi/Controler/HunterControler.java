@@ -50,7 +50,7 @@ public class HunterControler {
     @PostMapping("/hunters/{hunters_id}/huntingclub/{club_id}")
     public ResponseEntity addHuntertoClub(@PathVariable (name = "hunters_id") Long id, @PathVariable (name = "club_id") Long idClub){
 
-        return hunterService.addingHuntertoClubService(id,idClub);
+        return hunterService.addingHunterToClubService(id,idClub);
     }
 
 
