@@ -2,13 +2,13 @@ package com.example.HunterApi.model;
 
 
 import liquibase.pro.packaged.S;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class HunterDTO {
     private Long id;
     private String name;

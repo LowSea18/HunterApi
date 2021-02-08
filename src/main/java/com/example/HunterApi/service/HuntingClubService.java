@@ -1,5 +1,6 @@
 package com.example.HunterApi.service;
 
+import com.example.HunterApi.Exception.AlreadyExistException;
 import com.example.HunterApi.Exception.NotFoundException;
 import com.example.HunterApi.model.*;
 import com.example.HunterApi.repository.HuntingClubRepository;
@@ -60,6 +61,17 @@ public class HuntingClubService {
 
         HuntingClub hc = huntingClubRepository.findById(id).orElseThrow(() -> new NotFoundException("Can not find club, id: " + id));;
         return mapHuntingClubToHuntingClubDTO(hc);
+    }
+
+    public void updateClub(Long id,UpdateClubDto updateClubDto){
+        HuntingClub ClubFromDb =huntingClubRepository.findById(id).orElseThrow(() -> new NotFoundException("Hunting club does not exist id:" +id));
+        Optional <HuntingClub> club = huntingClubRepository.findByName(updateClubDto.getName());
+        if(club.isPresent()){
+            throw new AlreadyExistException("Hunting club already exist");
+        }else
+
+        ClubFromDb.setName(updateClubDto.getName());
+        huntingClubRepository.save(ClubFromDb);
     }
 
 

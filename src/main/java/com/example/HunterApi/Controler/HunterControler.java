@@ -53,6 +53,11 @@ public class HunterControler {
         return hunterService.addingHunterToClubService(id,idClub);
     }
 
+    @PutMapping("/hunters/{id}")
+    public void updateHunter(@PathVariable (name ="id") Long id, @RequestBody HunterDTO hunterDTO){
+        hunterService.updateHunter(id , hunterDTO);
+    }
+
 
 
 

@@ -21,4 +21,23 @@ public class Exception {
                 .time(LocalDateTime.now())
                 .build();
     }
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(WrongAgeException.class)
+    @ResponseBody
+    public ErrorMessage  handleWrongAgeException(final WrongAgeException e){
+        return ErrorMessage.builder()
+                .message(e.getMessage())
+                .time(LocalDateTime.now())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(AlreadyExistException.class)
+    @ResponseBody
+    public ErrorMessage  handleAlreadyExistException(final AlreadyExistException e){
+        return ErrorMessage.builder()
+                .message(e.getMessage())
+                .time(LocalDateTime.now())
+                .build();
+    }
 }

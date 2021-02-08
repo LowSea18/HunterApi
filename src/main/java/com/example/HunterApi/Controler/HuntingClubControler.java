@@ -1,9 +1,6 @@
 package com.example.HunterApi.Controler;
 
-import com.example.HunterApi.model.Hunter;
-import com.example.HunterApi.model.HunterInfoDto;
-import com.example.HunterApi.model.HuntingClub;
-import com.example.HunterApi.model.HuntingClubDto;
+import com.example.HunterApi.model.*;
 import com.example.HunterApi.service.HuntingClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +31,9 @@ public class HuntingClubControler{
     {
         huntingClubService.addHuntingClubService(add);
 
+    }
+    @PutMapping("/huntingclub/{id}")
+    public void updateClub(@PathVariable (name = "id") Long id, @RequestBody UpdateClubDto updateClubDto){
+        huntingClubService.updateClub(id, updateClubDto);
     }
 }

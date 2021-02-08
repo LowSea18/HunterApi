@@ -1,6 +1,8 @@
 package com.example.HunterApi.service;
 
+import com.example.HunterApi.Exception.AlreadyExistException;
 import com.example.HunterApi.Exception.NotFoundException;
+import com.example.HunterApi.Exception.WrongAgeException;
 import com.example.HunterApi.model.ClubNameInfo;
 import com.example.HunterApi.model.Hunter;
 import com.example.HunterApi.model.HunterDTO;
@@ -61,7 +63,7 @@ public class HunterService {
     public void addHunterService(Hunter add) throws IllegalAccessException
     {
         if(add.getAge()<=0){
-            throw new IllegalAccessException("age must be greater than zero!");
+            throw new WrongAgeException("Age must be greater then zero");
         }else
             {
                 Optional<Hunter> hunterFromDb = repository.findByNameAndSurname(add.getName().toLowerCase(),add.getSurname().toLowerCase());
@@ -76,19 +78,27 @@ public class HunterService {
 
     public void deleteHunterService(Long id) throws IllegalAccessException {
         Hunter hunterFromDb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+        repository.delete(hunterFromDb);
     }
 
     public ResponseEntity<String> addingHunterToClubService(Long id, Long idClub){
 
         Hunter hunterFromdb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
         HuntingClub clubFromdb = huntingClubRepository.findById(idClub).orElseThrow(() -> new NotFoundException("Can not find club, id: " + idClub));
-
         hunterFromdb.setHuntingClub(clubFromdb);
-
         repository.save(hunterFromdb);
-
         return ResponseEntity.ok().build();
-
+    }
+    public void updateHunter(Long id, HunterDTO hunterDTO){
+        Hunter hunterFromDb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+        Optional <Hunter> hunter = repository.findByNameAndSurname(hunterDTO.getName(),hunterDTO.getSurname());
+        if (hunter.isPresent()){
+            throw new AlreadyExistException("Hunter already exist");
+        }else
+        hunterFromDb.setName(hunterDTO.getName());
+        hunterFromDb.setSurname(hunterDTO.getSurname());
+        hunterFromDb.setAge(hunterDTO.getAge());
+        repository.save(hunterFromDb);
     }
 
 
