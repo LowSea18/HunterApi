@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class HunterDTO {
     private Long id;
     private String name;

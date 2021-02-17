@@ -2,6 +2,7 @@ package com.example.HunterApi.service;
 
 import com.example.HunterApi.Exception.AlreadyExistException;
 import com.example.HunterApi.Exception.NotFoundException;
+import com.example.HunterApi.mapping.Mapping;
 import com.example.HunterApi.model.*;
 import com.example.HunterApi.repository.HuntingClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,50 +18,35 @@ import java.util.Optional;
 public class HuntingClubService {
 
     @Autowired
-    private HuntingClubRepository huntingClubRepository;
+    private final HuntingClubRepository huntingClubRepository;
+    @Autowired
+    private final Mapping mapping;
 
+    public HuntingClubService(HuntingClubRepository huntingClubRepository,Mapping mapping){
+        this.huntingClubRepository=huntingClubRepository;
+        this.mapping=mapping;
+    }
 
     public List<HuntingClubDto> showAllHuntersClubsService() {
 
         List<HuntingClubDto> huntingClubDtos = new ArrayList<>();
-        huntingClubRepository.findAll().forEach(hc -> huntingClubDtos.add(mapHuntingClubToHuntingClubDTO(hc)));
+        huntingClubRepository.findAll().forEach(hc -> huntingClubDtos.add(mapping.mapHuntingClubToHuntingClubDTO(hc)));
         return huntingClubDtos;
     }
 
-    private HuntingClubDto mapHuntingClubToHuntingClubDTO(HuntingClub huntingClub) {
-
-        List<HunterInfoDto> hunterInfoDtos = new ArrayList<>();
-        huntingClub.getHunters().forEach(h -> hunterInfoDtos.add(mapToInfo(h)));
-
-        return HuntingClubDto.builder()
-                .id(huntingClub.getId())
-                .name(huntingClub.getName())
-                .huntingInfo(hunterInfoDtos)
-                .build();
-
-
-    }
-
-    private HunterInfoDto mapToInfo(Hunter hunter) {
-        return HunterInfoDto.builder()
-                .name(hunter.getName())
-                .surname(hunter.getSurname())
-                .build();
-    }
-
-    public void addHuntingClubService(HuntingClub club) throws IllegalAccessException {
+    public void addHuntingClubService(HuntingClub club)  {
         Optional<HuntingClub> hunterClubFromDb = huntingClubRepository.findByName(club.getName());
         if (hunterClubFromDb.isPresent()) {
-            throw new IllegalAccessException("Hunting Club already exist");
+            throw new AlreadyExistException("Hunting Club already exist");
         } else
             huntingClubRepository.save(club);
-            System.out.println("Added");
+
     }
 
     public HuntingClubDto getHuntingClubByIdService(Long id) throws IllegalAccessException {
 
         HuntingClub hc = huntingClubRepository.findById(id).orElseThrow(() -> new NotFoundException("Can not find club, id: " + id));;
-        return mapHuntingClubToHuntingClubDTO(hc);
+        return mapping.mapHuntingClubToHuntingClubDTO(hc);
     }
 
     public void updateClub(Long id,UpdateClubDto updateClubDto){

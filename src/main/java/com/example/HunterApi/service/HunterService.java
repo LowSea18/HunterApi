@@ -3,6 +3,7 @@ package com.example.HunterApi.service;
 import com.example.HunterApi.Exception.AlreadyExistException;
 import com.example.HunterApi.Exception.NotFoundException;
 import com.example.HunterApi.Exception.WrongAgeException;
+import com.example.HunterApi.mapping.Mapping;
 import com.example.HunterApi.model.ClubNameInfo;
 import com.example.HunterApi.model.Hunter;
 import com.example.HunterApi.model.HunterDTO;
@@ -24,83 +25,71 @@ import java.util.Optional;
 public class HunterService {
 
     @Autowired
-    private HunterRepository repository;
+    private final HunterRepository hunterRepository;
     @Autowired
-    private HuntingClubRepository huntingClubRepository;
+    private final HuntingClubRepository huntingClubRepository;
+    @Autowired
+    private final Mapping mapping;
 
+    public HunterService(HunterRepository hunterRepository,HuntingClubRepository huntingClubRepository,Mapping mapping){
+        this.hunterRepository=hunterRepository;
+        this.huntingClubRepository=huntingClubRepository;
+        this.mapping=mapping;
+    }
 
     public List<HunterDTO> showAllHuntersService(){
         List<HunterDTO> dtos = new ArrayList<>();
-        repository.findAll().forEach(h -> dtos.add(mapHunterToDto(h)));
+        hunterRepository.findAll().forEach(h -> dtos.add(mapping.mapHunterToDto(h)));
         return dtos;
     }
-    private HunterDTO mapHunterToDto(Hunter h){
 
-        //List<ClubNameInfo> clubNameInfos = new ArrayList<>();
-        if (h.getHuntingClub() != null) {
-            return HunterDTO.builder()
-                    .clubName(h.getHuntingClub().getName())
-                    .name(h.getName())
-                    .surname(h.getSurname())
-                    .id(h.getId())
-                    .age(h.getAge())
-                    .build();
-        }else {
-            return HunterDTO.builder()
-                    .name(h.getName())
-                    .surname(h.getSurname())
-                    .id(h.getId())
-                    .age(h.getAge())
-                    .build();
-        }
+    public HunterDTO getHunterByIdService(Long id)  {
+        Hunter hunterFromDb = hunterRepository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+        return mapping.mapHunterToDto(hunterFromDb);
     }
 
-    public HunterDTO getHunterByIdService(Long id) throws IllegalAccessException {
-        Hunter hunterFromDb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
-        return mapHunterToDto(hunterFromDb);
-    }
-
-    public void addHunterService(Hunter add) throws IllegalAccessException
+    public void addHunterService(Hunter add)
     {
-        if(add.getAge()<=0){
-            throw new WrongAgeException("Age must be greater then zero");
+        if(add.getAge()<18){
+            throw new WrongAgeException("Age must be greater then 18");
         }else
             {
-                Optional<Hunter> hunterFromDb = repository.findByNameAndSurname(add.getName().toLowerCase(),add.getSurname().toLowerCase());
+                Optional<Hunter> hunterFromDb = hunterRepository.findByNameAndSurname(add.getName(),add.getSurname());
                 if (hunterFromDb.isPresent()) {
-                    throw new IllegalAccessException("Hunter already exist");
+                    throw new AlreadyExistException("Hunter already exist");
                 }else
-                    repository.save(add);
+                    hunterRepository.save(add);
             }
     }
 
-
-
-    public void deleteHunterService(Long id) throws IllegalAccessException {
-        Hunter hunterFromDb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
-        repository.delete(hunterFromDb);
+    public void deleteHunterService(Long id)  {
+        Hunter hunterFromDb = hunterRepository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+        hunterRepository.delete(hunterFromDb);
     }
 
-    public ResponseEntity<String> addingHunterToClubService(Long id, Long idClub){
-
-        Hunter hunterFromdb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+    public void addingHunterToClubService(Long id, Long idClub){
+        Hunter hunterFromdb = hunterRepository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
         HuntingClub clubFromdb = huntingClubRepository.findById(idClub).orElseThrow(() -> new NotFoundException("Can not find club, id: " + idClub));
         hunterFromdb.setHuntingClub(clubFromdb);
-        repository.save(hunterFromdb);
-        return ResponseEntity.ok().build();
+        hunterRepository.save(hunterFromdb);
+
     }
     public void updateHunter(Long id, HunterDTO hunterDTO){
-        Hunter hunterFromDb = repository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
-        Optional <Hunter> hunter = repository.findByNameAndSurname(hunterDTO.getName(),hunterDTO.getSurname());
-        if (hunter.isPresent()){
-            throw new AlreadyExistException("Hunter already exist");
-        }else
-        hunterFromDb.setName(hunterDTO.getName());
-        hunterFromDb.setSurname(hunterDTO.getSurname());
-        hunterFromDb.setAge(hunterDTO.getAge());
-        repository.save(hunterFromDb);
+
+        if(hunterDTO.getAge()<18){
+            throw  new WrongAgeException("Age must be greater then 18");
+        }else {
+
+            Hunter hunterFromDb = hunterRepository.findById(id).orElseThrow(() -> new NotFoundException("Can not find hunter, id: " + id));
+            Optional<Hunter> hunter = hunterRepository.findByNameAndSurname(hunterDTO.getName(), hunterDTO.getSurname());
+            if (hunter.isPresent()) {
+                throw new AlreadyExistException("Hunter already exist");
+            } else
+                hunterFromDb.setName(hunterDTO.getName());
+            hunterFromDb.setSurname(hunterDTO.getSurname());
+            hunterFromDb.setAge(hunterDTO.getAge());
+            hunterRepository.save(hunterFromDb);
+        }
     }
-
-
 
 }
