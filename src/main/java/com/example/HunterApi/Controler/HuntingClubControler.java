@@ -1,14 +1,13 @@
 package com.example.HunterApi.Controler;
 
-import com.example.HunterApi.model.*;
+import com.example.HunterApi.model.Entity.HuntingClub;
+import com.example.HunterApi.model.HuntingClubDto.HuntingClubDto;
+import com.example.HunterApi.model.HuntingClubDto.UpdateClubDto;
 import com.example.HunterApi.service.HuntingClubService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.bind.annotation.XmlSchemaTypes;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class HuntingClubControler{

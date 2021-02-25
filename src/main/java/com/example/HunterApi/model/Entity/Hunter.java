@@ -1,11 +1,9 @@
-package com.example.HunterApi.model;
+package com.example.HunterApi.model.Entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.HunterApi.model.Entity.HuntingClub;
 import lombok.*;
-import net.bytebuddy.implementation.bind.annotation.Default;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter

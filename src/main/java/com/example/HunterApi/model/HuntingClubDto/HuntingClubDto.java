@@ -1,5 +1,6 @@
-package com.example.HunterApi.model;
+package com.example.HunterApi.model.HuntingClubDto;
 
+import com.example.HunterApi.model.HunterDto.HunterInfoDto;
 import lombok.Builder;
 import lombok.Data;
 

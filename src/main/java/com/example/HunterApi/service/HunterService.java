@@ -4,18 +4,13 @@ import com.example.HunterApi.Exception.AlreadyExistException;
 import com.example.HunterApi.Exception.NotFoundException;
 import com.example.HunterApi.Exception.WrongAgeException;
 import com.example.HunterApi.mapping.Mapping;
-import com.example.HunterApi.model.ClubNameInfo;
-import com.example.HunterApi.model.Hunter;
-import com.example.HunterApi.model.HunterDTO;
-import com.example.HunterApi.model.HuntingClub;
+import com.example.HunterApi.model.Entity.Hunter;
+import com.example.HunterApi.model.HunterDto.HunterDTO;
+import com.example.HunterApi.model.Entity.HuntingClub;
 import com.example.HunterApi.repository.HunterRepository;
 import com.example.HunterApi.repository.HuntingClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +20,11 @@ import java.util.Optional;
 public class HunterService {
 
     @Autowired
-    private final HunterRepository hunterRepository;
+    private HunterRepository hunterRepository;
     @Autowired
-    private final HuntingClubRepository huntingClubRepository;
+    private HuntingClubRepository huntingClubRepository;
     @Autowired
-    private final Mapping mapping;
+    private Mapping mapping;
 
     public HunterService(HunterRepository hunterRepository,HuntingClubRepository huntingClubRepository,Mapping mapping){
         this.hunterRepository=hunterRepository;

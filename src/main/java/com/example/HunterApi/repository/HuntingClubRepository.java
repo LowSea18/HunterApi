@@ -1,6 +1,6 @@
 package com.example.HunterApi.repository;
 
-import com.example.HunterApi.model.HuntingClub;
+import com.example.HunterApi.model.Entity.HuntingClub;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

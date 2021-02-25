@@ -1,18 +1,12 @@
 package com.example.HunterApi.Controler;
 
-import com.example.HunterApi.model.Hunter;
-import com.example.HunterApi.model.HunterDTO;
-import com.example.HunterApi.repository.HunterRepository;
+import com.example.HunterApi.model.Entity.Hunter;
+import com.example.HunterApi.model.HunterDto.HunterDTO;
 import com.example.HunterApi.service.HunterService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Id;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor

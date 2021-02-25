@@ -1,4 +1,4 @@
-package com.example.HunterApi.model;
+package com.example.HunterApi.model.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +15,6 @@ public class HuntingClub {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy="huntingClub")
+    @OneToMany(mappedBy="huntingClub",fetch = FetchType.EAGER)
     private List<Hunter> hunters;
 }

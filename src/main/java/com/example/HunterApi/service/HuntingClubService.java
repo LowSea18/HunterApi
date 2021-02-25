@@ -3,11 +3,11 @@ package com.example.HunterApi.service;
 import com.example.HunterApi.Exception.AlreadyExistException;
 import com.example.HunterApi.Exception.NotFoundException;
 import com.example.HunterApi.mapping.Mapping;
-import com.example.HunterApi.model.*;
+import com.example.HunterApi.model.Entity.HuntingClub;
+import com.example.HunterApi.model.HuntingClubDto.HuntingClubDto;
+import com.example.HunterApi.model.HuntingClubDto.UpdateClubDto;
 import com.example.HunterApi.repository.HuntingClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class HuntingClubService {
         return mapping.mapHuntingClubToHuntingClubDTO(hc);
     }
 
-    public void updateClub(Long id,UpdateClubDto updateClubDto){
+    public void updateClub(Long id, UpdateClubDto updateClubDto){
         HuntingClub ClubFromDb =huntingClubRepository.findById(id).orElseThrow(() -> new NotFoundException("Hunting club does not exist id:" +id));
         Optional <HuntingClub> club = huntingClubRepository.findByName(updateClubDto.getName());
         if(club.isPresent()){

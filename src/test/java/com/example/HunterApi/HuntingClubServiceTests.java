@@ -2,8 +2,8 @@ package com.example.HunterApi;
 
 import com.example.HunterApi.Exception.AlreadyExistException;
 import com.example.HunterApi.Exception.NotFoundException;
-import com.example.HunterApi.model.HuntingClub;
-import com.example.HunterApi.model.UpdateClubDto;
+import com.example.HunterApi.model.Entity.HuntingClub;
+import com.example.HunterApi.model.HuntingClubDto.UpdateClubDto;
 import com.example.HunterApi.repository.HuntingClubRepository;
 import com.example.HunterApi.service.HuntingClubService;
 import org.junit.jupiter.api.Test;
